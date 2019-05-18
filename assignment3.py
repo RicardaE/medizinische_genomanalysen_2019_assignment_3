@@ -2,6 +2,7 @@
 
 import vcf
 import httplib2
+import json
 
 __author__ = 'Ricarda_Erhart'
 
@@ -28,18 +29,6 @@ class Assignment3:
         self.vcf_path = "chr16.vcf"
 
     def annotate_vcf_file(self):
-        '''
-        - Annotate the VCF file using the following example code (for 1 variant)
-        - Iterate of the variants (use first 900)
-        - Store the result in a data structure
-        :return:
-        '''
-        print("TODO")
-
-        ##
-        ## Example loop
-        ##
-
         ## Build the connection
         h = httplib2.Http()
         headers = {'content-type': 'application/x-www-form-urlencoded'}
@@ -61,47 +50,53 @@ class Assignment3:
         annotation_result = con.decode('utf-8')
 
         ## TODO now do something with the 'annotation_result'
-
-        ##
-        ## End example code
-        ##
-
-        return None  ## return the data structure here
+        dic_annotation_results=json.loads(annotation_result)
+        return dic_annotation_results  ## return the data structure here
 
 
-    def get_list_of_genes(self):
-        '''
-        Print the name of genes in the annotation data set
-        :return:
-        '''
-        print("TODO")
+    def get_list_of_genes(self, dic_annotation_results):#other locations
+        genenames=[]
+        for vcf in dic_annotation_results:
+            if 'snpeff' in vcf:
+                for annotation in vcf['snpeff']['ann']:
+                    if isinstance(annotation, dict) == True:
+                        if annotation['genename'] not in genenames:
+                            genenames.append(annotation['genename'])
+        print('Names of genes in Annotation: ',genenames)
 
 
-    def get_num_variants_modifier(self):
-        '''
-        Print the number of variants with putative_impact "MODIFIER"
-        :return:
-        '''
-        print("TODO")
+    def get_num_variants_modifier(self, dic_annotation_results):
+        vcf_mod=0
+        for vcf in dic_annotation_results:
+            if 'snpeff' in vcf:
+                for annotation in vcf['snpeff']['ann']:
+                    if isinstance(annotation, dict) == True:
+                        if annotation['putative_impact'] == "MODIFIER":
+                            vcf_mod+=1
+                            break
+        print('Number of variants with putative_impact "MODIFIER": ', vcf_mod)
 
 
-    def get_num_variants_with_mutationtaster_annotation(self):
-        '''
-        Print the number of variants with a 'mutationtaster' annotation
-        :return:
-        '''
-        print("TODO")
+
+    def get_num_variants_with_mutationtaster_annotation(self, dic_annotation_results):
+        mutationtaster=0
+        for vcf in dic_annotation_results:
+            if 'dbnsfp' in vcf:
+                if 'mutationtaster' in vcf['dbnsfp']:
+                    mutationtaster+=1
+        print("Number of variants with a 'mutationtaster' annotation: ", mutationtaster)
 
 
-    def get_num_variants_non_synonymous(self):
-        '''
-        Print the number of variants with 'consequence' 'NON_SYNONYMOUS'
-        :return:
-        '''
-        print("TODO")
+    def get_num_variants_non_synonymous(self, dic_annotation_results):
+        nsyn=0
+        for vcf in dic_annotation_results:
+            if 'cadd' in vcf:
+                if vcf['cadd']['consequence'] == "NON_SYNONYMOUS":
+                    nsyn+=1
+        print("Number of variants with 'consequence' 'NON_SYNONYMOUS': ", nsyn)
 
 
-    def view_vcf_in_browser(self):
+    def view_vcf_in_browser(self):#
         '''
         - Open a browser and go to https://vcf.iobio.io/
         - Upload the VCF file and investigate the details
@@ -113,8 +108,13 @@ class Assignment3:
 
 
     def print_summary(self):
-        self.annotate_vcf_file()
         print("Print all results here")
+        dic_annotation_results = self.annotate_vcf_file()
+        self.get_list_of_genes(dic_annotation_results)#
+        self.get_num_variants_modifier(dic_annotation_results)
+        self.get_num_variants_with_mutationtaster_annotation(dic_annotation_results)
+        self.get_num_variants_non_synonymous(dic_annotation_results)
+        #self.view_vcf_in_browser()
 
 
 def main():
