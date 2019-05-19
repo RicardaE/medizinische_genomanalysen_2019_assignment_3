@@ -54,7 +54,7 @@ class Assignment3:
         return dic_annotation_results  ## return the data structure here
 
 
-    def get_list_of_genes(self, dic_annotation_results):#other locations
+    def get_list_of_genes(self, dic_annotation_results):
         genenames=[]
         for vcf in dic_annotation_results:
             if 'snpeff' in vcf:
@@ -62,7 +62,18 @@ class Assignment3:
                     if isinstance(annotation, dict) == True:
                         if annotation['genename'] not in genenames:
                             genenames.append(annotation['genename'])
-        print('Names of genes in Annotation: ',genenames)
+            if 'dbnsfp' in vcf:
+                if 'genename' in vcf['dbnsfp']:
+                    if vcf['dbnsfp']['genename'] not in genenames:
+                        genenames.append(vcf['dbnsfp']['genename'])
+            if 'cadd' in vcf:
+                if 'gene' in vcf['cadd']:
+                    for annotation in vcf['cadd']['gene']:
+                        if 'genename' in annotation:
+                            if isinstance(annotation, dict) == True:
+                                if annotation['genename'] not in genenames:
+                                    genenames.append(annotation['genename'])
+        print('Names of genes in Annotation: ', genenames)
 
 
     def get_num_variants_modifier(self, dic_annotation_results):
