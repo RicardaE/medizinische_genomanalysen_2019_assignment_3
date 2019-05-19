@@ -96,15 +96,9 @@ class Assignment3:
         print("Number of variants with 'consequence' 'NON_SYNONYMOUS': ", nsyn)
 
 
-    def view_vcf_in_browser(self):#
-        '''
-        - Open a browser and go to https://vcf.iobio.io/
-        - Upload the VCF file and investigate the details
-        :return:
-        '''
-
+    def view_vcf_in_browser(self):
         ## Document the final URL here
-        print("TODO")
+        print("URL for vcf in ibio: https://vcf.iobio.io/?species=Human&build=GRCh38")
 
 
     def print_summary(self):
@@ -114,7 +108,7 @@ class Assignment3:
         self.get_num_variants_modifier(dic_annotation_results)
         self.get_num_variants_with_mutationtaster_annotation(dic_annotation_results)
         self.get_num_variants_non_synonymous(dic_annotation_results)
-        #self.view_vcf_in_browser()
+        self.view_vcf_in_browser()
 
 
 def main():
