@@ -73,7 +73,7 @@ class Assignment3:
                             if isinstance(annotation, dict) == True:
                                 if annotation['genename'] not in genenames:
                                     genenames.append(annotation['genename'])
-        print('Names of genes in Annotation: ', genenames)
+        print('Names of genes in Annotations: ', genenames)
 
 
     def get_num_variants_modifier(self, dic_annotation_results):
@@ -109,7 +109,12 @@ class Assignment3:
 
     def view_vcf_in_browser(self):
         ## Document the final URL here
+        print('converted chr16.vcf in command line using: "bgzip chr16.vcf", "tabix -p vcf chr16.vcf.gz"')
+        print('uploaded files on: https://vcf.iobio.io/')
         print("URL for vcf in ibio: https://vcf.iobio.io/?species=Human&build=GRCh38")
+        print('Most variants are SNPs')
+        print('Most base changes are between A and G or betwenn T and C')
+        print('No variants were found in the middle of the chromosome (around 45M)')
 
 
     def print_summary(self):
